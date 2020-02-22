@@ -1,4 +1,4 @@
-package past.simple.code;
+package com.gitHub.past;
 
 public enum Invariable {
     Eend("");

@@ -1,4 +1,4 @@
-package past.simple.code.stringTool;
+package com.gitHub.past.stringTool;
 
 import java.util.Optional;
 import java.util.function.Predicate;

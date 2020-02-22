@@ -1,4 +1,4 @@
-package past.simple.code.insteadOfIfElse;
+package com.gitHub.past.insteadOfIfElse;
 
 import java.util.Objects;
 import java.util.Optional;
