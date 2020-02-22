@@ -7,6 +7,8 @@
     <groupId>com.github.daida459031925</groupId>
     <artifactId>past</artifactId>
     <version>0.0.1</version>
+    <name>past</name>
+    <url>https://github.com/daida459031925/past.git</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
