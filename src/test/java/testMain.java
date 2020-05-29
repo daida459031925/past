@@ -23,7 +23,7 @@ public class testMain {
 
 
         ListUtil listUtil = new ListUtil(integers,integers1,null,null);
-        listUtil.aJianb.
+//        listUtil.aJianb.
 
     }
 }
