@@ -1,6 +1,7 @@
 package com.gitHub.past.listTool;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -15,6 +16,11 @@ public class ListUtil<T,R,XT> {
     private Function<T,XT> fzuo;
     //由于不知道是什么对象所以让用户自己传入转换后的
     private Function<R,XT> fyou;
+
+    //通过fzuo返还的新对象
+    private List<XT> xzuo;
+    //通过fyou返还的新对象
+    private List<XT> xyou;
 
     {
         fzuo = null;
@@ -90,8 +96,20 @@ public class ListUtil<T,R,XT> {
         ajiaoJib.apply(zuo,you);
     }
 
+    private List<?> getXzuo(){
+        Optional.ofNullable(this.fzuo).map(e-> this.zuo.stream().map(v->this.fzuo.apply(v)).collect(Collectors.toList())).orElse(this.zuo);
+
+        return null;
+    }
+
+    private List<?> getXyou(){
+
+        return null;
+    }
+
     //交集
-    private BiFunction<List<T>,List<R>,List<T>> ajiaoJib = (List<T> i1, List<R> i2)->i1.stream().filter(num -> i2.contains(num)).collect(Collectors.toList());;
+    private BiFunction<List<T>,List<R>,List<T>> ajiaoJib = (List<T> i1, List<R> i2)->
+            i1.stream().filter(num -> i2.contains(num)).collect(Collectors.toList());;
 
     private BiFunction<List<R>,List<T>,List<R>> bjiaoJia = (List<R> i2, List<T> i1)->i2.stream().filter(num -> i1.contains(num)).collect(Collectors.toList());;
 
