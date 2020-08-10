@@ -3,18 +3,16 @@ package com.gitHub.past.JDBC;
 /**
  * 戴达
  */
-import org.apache.log4j.Logger;
-import org.springframework.context.annotation.Configuration;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * 使用JDBC工具类,获取数据库的连接 采用读取配置文件的方式 读取配置文件,获取连接,执行一次,static{}
  */
-@Configuration
 public class JDBCUtil {
 
     private static String dbUrl;
@@ -32,18 +30,18 @@ public class JDBCUtil {
         try {
             readConfig();
             Class.forName(driverClassName);
-            Logger.getRootLogger().info("数据库连接成功");
+            Logger.getAnonymousLogger().log(Level.INFO,"数据库连接成功");
         } catch (Exception e) {
-            Logger.getRootLogger().info("数据库连接失败");
+            Logger.getAnonymousLogger().log(Level.INFO,"数据库连接失败");
         }
     }
 
     private static void readConfig() throws IOException {
-        try (InputStream is = com.iotcloud.cloud.utils.JDBCUtil.class.getClassLoader().getResourceAsStream("application.properties");) {
+        try (InputStream is = JDBCUtil.class.getClassLoader().getResourceAsStream("application.properties");) {
             Properties pro = new Properties();
             pro.load(is);
             String property = pro.getProperty("spring.profiles.active");
-            try (InputStream is1 = com.iotcloud.cloud.utils.JDBCUtil.class.getClassLoader().getResourceAsStream("application-"+property+".properties");){
+            try (InputStream is1 = JDBCUtil.class.getClassLoader().getResourceAsStream("application-"+property+".properties");){
                 pro.load(is1);
                 driverClassName = pro.getProperty("spring.datasource.driver-class-name");
                 dbUrl = pro.getProperty("spring.datasource.url");
