@@ -10,8 +10,15 @@ public enum Invariable {
     YYYY_MM_DD("yyyy-MM-dd"),
     YYYY_MM_DD_HH_MM_SS("yyyy-MM-dd HH:mm:ss"),
     YYYYMMDDHHMMSS("yyyyMMddHHmmss"),
-    YYYYMMDD("yyyyMMdd")
+    YYYYMMDD("yyyyMMdd"),
 
+
+    DATA("data"),
+    STATUS("status"),
+    MSG("msg"),
+
+
+    EMPTY("")
     ;
 
 
