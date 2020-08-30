@@ -62,8 +62,8 @@ public class ListUtil<T, R, XT> {
     /***
      * @param zuo 基础数据list
      * @param you 基础数据list
-     * @param fzuo 需要将list中zuo的数据变成一个新list   需要传入的就是java8中 流的map(e->XXXX)形式
-     * @param fyou 需要将list中you的数据变成一个新list   需要传入的就是java8中 流的map(e->XXXX)形式
+     * @param fzuo 需要将list中zuo的数据变成一个新list   需要传入的就是java8中 流的map(e-》XXXX)形式
+     * @param fyou 需要将list中you的数据变成一个新list   需要传入的就是java8中 流的map(e-》XXXX)形式
      */
     public static <T, R, XT> ListUtil<T, R, XT> getListUtil(List<T> zuo, List<R> you, Function<T, XT> fzuo, Function<R, XT> fyou){
         return new ListUtil<T, R, XT>().setZuo(zuo).setYou(you).setFzuo(fzuo).setFyou(fyou);
