@@ -1,25 +1,39 @@
 package com.gitHub.past.stringTool;
 
+import com.gitHub.past.Invariable;
+
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 public class StringUtil {
 
-    /**
-     * 传入一个字符串查看是否为null 或者为"" 但是不判断是否存在“ ”这个情况
-     */
-    public static Predicate<String> isEmpty = (String string) -> Optional.ofNullable(string).orElse("").trim().length()>0;
+    private String str;
+
+    private StringUtil(String string){
+        str = string;
+    }
+
+    public static StringUtil getString(Object string){
+        return new StringUtil(Optional.ofNullable(string).map(e->toString.apply(e)).orElse(Invariable.EMPTY.toString()));
+    }
+
+    public StringUtil trim(){
+        str = str.trim();
+        return this;
+    }
+
     /**
      * 传入一个字符串查看是否为null 或者为"" 判断是否存在“ ”这个情况 将“ ”左右两边的进行过滤
      * 但是“A B”不算
      */
-    public static Predicate<String> isEmptyLRtrim = (String string) -> Optional.ofNullable(string).map(e->e.trim()).orElse("").trim().length()>0;
+    public Boolean isEmpty (){
+        return this.str.length()<=0;
+    }
 
     /**
      * 将对象使用String.valueOf 防止对象出现null的情况 如果传入的为null 那么返还"null"
      */
-    private Function<Object,String> toString = (Object obj)->String.valueOf(obj);
+    public static Function<Object,String> toString = String::valueOf;
 
     //根据传入的对象返还一个线程安全的对象 根据java8的lambda生成
 //    public static <T> T getSafetyBean(T t){
@@ -27,7 +41,6 @@ public class StringUtil {
 //    }
 
     public static void main(String[] args) {
-        String s = null;
-        s.isEmpty();
+        System.out.println(StringUtil.getString(null).trim().isEmpty());
     }
 }
