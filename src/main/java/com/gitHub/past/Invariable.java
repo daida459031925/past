@@ -11,6 +11,8 @@ public enum Invariable {
     YYYY_MM_DD_HH_MM_SS("yyyy-MM-dd HH:mm:ss"),
     YYYYMMDDHHMMSS("yyyyMMddHHmmss"),
     YYYYMMDD("yyyyMMdd"),
+    HH_MM_SS("HH:mm:ss"),
+    HH_MM("HH:mm"),
 
     EXIT("exit"),
     BIN_BASH("/bin/bash"),
