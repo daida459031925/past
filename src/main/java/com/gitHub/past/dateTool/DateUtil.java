@@ -77,8 +77,6 @@ public class DateUtil {
 
     /**
      * 获得指定时间的毫秒数
-     *
-     * @return
      */
     public static BiFunction<LocalDateTime, Integer, Long> getMillisecondAndInt = (localDateTime, integer) -> localDateTime.toInstant(ZoneOffset.ofHours(integer)).toEpochMilli();
     public static Function<LocalDateTime, Long> getMillisecond = (localDateTime) -> getMillisecondAndInt.apply(localDateTime, 8);
