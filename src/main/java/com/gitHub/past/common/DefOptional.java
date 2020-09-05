@@ -115,11 +115,13 @@ public final class DefOptional<T, R> {
 //    }
 //
 
-    public <U> DefOptional<U,R> map(Function<? super T, ? extends U> mapper) {
+    public <U> DefOptional<U, R> map(Function<? super T, ? extends U> mapper) {
         Objects.requireNonNull(mapper);
         if (isValuePresent())
             return DefOptional.ofNullable(mapper.apply(value));
-        else {
+        else if (isDefvaluePresent()) {
+            return DefOptional.ofNullable(null, defvalue);
+        } else {
             return empty();
         }
     }
@@ -130,7 +132,7 @@ public final class DefOptional<T, R> {
         if (isValuePresent()) {
             return DefOptional.ofNullable(umapper.apply(value));
         } else if (isDefvaluePresent()) {
-            return DefOptional.ofNullable(null,rmapper.apply(defvalue));
+            return DefOptional.ofNullable(null, rmapper.apply(defvalue));
         }
         return empty();
     }
@@ -264,8 +266,11 @@ public final class DefOptional<T, R> {
 //                : "DefOptional.empty";
 //    }
     public static void main(String[] args) {
-        DefOptional.ofNullable(null, new Integer(1)).map(e->
-            e.toString(),v->{System.out.println(v.byteValue());return v.toString();}).get()/*.ifdefPresent(e->{
+        DefOptional.ofNullable(null, new Integer(1)).map(e ->
+                e.toString(), v -> {
+            System.out.println(v.byteValue());
+            return v.toString();
+        }).get()/*.ifdefPresent(e->{
             System.out.println(e.toString());
             System.out.println(e);
             System.out.println(e);

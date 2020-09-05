@@ -101,6 +101,8 @@ public class DateUtil {
         Long end2 = DateUtil.getMillisecond.apply(endTime2);
         //实际上就是开始时间小于结束时间并且是第一个的开始和第二个的结束adn第二个的开始和第一个的结束
         //数据库中也可以使用这种时间计算
+        //                                                                  08:00   20:00    19:00    18:00
+        //                                                                  08:00   20:00    17:00    18:00
         return ((equal && (start1.equals(end2) || start2.equals(end1))) || (start1 < end2 && start2 < end1));
     };
 
