@@ -55,6 +55,7 @@ public class DateUtil {
     //只能把他用作dtfY_M_D_H_M_S
     private static Function<String, LocalDateTime> getLdtParseStr = (string) -> LocalDateTime.parse(string, dtfY_M_D_H_M_S);
     public static Function<Date, LocalDateTime> getLdtParseDate = (date) -> getSdfParseldt(sdfY_M_D_H_M_S.format(date), sdfY_M_D_H_M_S);
+    public static BiFunction<LocalDate,LocalTime,LocalDateTime> getLdtDateTime = LocalDateTime::of;
 
     //通用时间解决方案
     public static LocalDateTime getSdfParseldt(String string, SimpleDateFormat sdf) {
@@ -123,21 +124,10 @@ public class DateUtil {
 //        }
 //    };
 
-    /**
-     * 当前时间到目标时间内容
-     * 以及当前时间的内容
-     */
-    class ThisDayToAimDay {
-        private LocalDateTime now;
-        private LocalDateTime end;
-
-
-    }
-
-
     public static void main(String[] args) {
         LocalDateTime now = LocalDateTime.now();
-
+        DaidaLocalDateTime s = new DaidaLocalDateTime(now);
+        s.updTime(1,2,3,4,5,6,7);
         Logger.getAnonymousLogger().log(Level.INFO, LocalDate.now().toString());
         Logger.getAnonymousLogger().log(Level.INFO, LocalDateTime.now().toString());
         Logger.getAnonymousLogger().log(Level.INFO, LocalTime.now().toString());

@@ -1,9 +1,15 @@
 package com.gitHub.past.dateTool;
 
-import java.time.DayOfWeek;
-import java.time.Duration;
-import java.time.LocalDateTime;
+import com.gitHub.past.common.DefOptional;
+
+import java.time.*;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class DaidaLocalDateTime {
     /**
@@ -52,6 +58,10 @@ public class DaidaLocalDateTime {
         //对时间计算类赋值
         duration = Duration.between(getThisDate, endDate);
         return this;
+    }
+
+    public LocalDateTime getEndDate() {
+        return endDate;
     }
 
     /**
@@ -121,7 +131,7 @@ public class DaidaLocalDateTime {
      * @return
      */
     public boolean isLeapYear() {
-        return true;
+        return getThisDate.toLocalDate().isLeapYear();
     }
 
     public LocalDateTime getThisDate() {
@@ -185,4 +195,30 @@ public class DaidaLocalDateTime {
         return isTime(startTime, endTime, false);
     }
 
+    /**
+     * 根据当前getThisDate 时间来计算未来时间或过去时间
+     */
+    public DaidaLocalDateTime updTime(long Year,long Month,long Day,long Hour,long Minute,long Second) {
+        return new DaidaLocalDateTime(DateUtil.getLdtDateTime.apply(getThisDate.toLocalDate().plusYears(Year).plusMonths(Month).plusDays(Day),
+                getThisDate.toLocalTime().plusHours(Hour).plusMinutes(Minute).plusSeconds(Second)));
+    }
+
+    /**
+     *
+     * @param longs long Year,long Month,long Day,long Hour,long Minute,long Second
+     * 最多支持6个参数 添加顺序为 年 月 日 时 分 秒 目前不支持跨某个点传入
+     */
+    public DaidaLocalDateTime updTime(long... longs) {
+        //数组拷贝
+        long[] log = longs;
+        if(longs.length!=6) log = Arrays.copyOf(longs,6);
+//        System.arraycopy(原数组名，起始下标，新数组名，起始下标，复制长度);
+        return updTime(log[0],log[1],log[2],log[3],log[4],log[5]);
+    }
+
+    public DaidaLocalDateTime updTime(int... los) {
+        int[] ints = los;
+        if(los.length!=6) ints = Arrays.copyOf(los,6);
+        return updTime(ints[0],ints[1],ints[2],ints[3],ints[4],ints[5]);
+    }
 }
