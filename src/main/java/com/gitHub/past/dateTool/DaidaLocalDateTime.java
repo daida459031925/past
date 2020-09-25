@@ -1,9 +1,13 @@
 package com.gitHub.past.dateTool;
 
 
+import com.gitHub.past.Invariable;
+import com.gitHub.past.calculation.BigDecimalUtil;
+
 import java.time.*;
-import java.util.Arrays;
-import java.util.Date;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.IntStream;
 
 public class DaidaLocalDateTime {
     /**
@@ -198,7 +202,6 @@ public class DaidaLocalDateTime {
     }
 
     /**
-     *
      * @param longs long Year,long Month,long Day,long Hour,long Minute,long Second
      * 最多支持6个参数 添加顺序为 年 月 日 时 分 秒 目前不支持跨某个点传入
      */
@@ -214,5 +217,68 @@ public class DaidaLocalDateTime {
         int[] ints = los;
         if(los.length!=6) ints = Arrays.copyOf(los,6);
         return updTime(ints[0],ints[1],ints[2],ints[3],ints[4],ints[5]);
+    }
+
+
+    /**
+     * 工具类需要把 “11:11”   和添加  某个单独时间的加减  添加进来
+     * 默认处理数据“yyyy-MM-dd HH:mm:ss”
+     */
+    //官方原版只支持 年-月-日T十:分:秒.毫秒
+    public DaidaLocalDateTime addTime(String dateString, String timeString){
+        return addTime(dateString,timeString,false);
+    }
+
+    public DaidaLocalDateTime addTime(String dateString, String timeString,boolean del){
+        int[] apply = DateUtil.getTimesInt.apply(null);
+        setInts(dateString,apply,0,del);
+        setInts(timeString,apply,3,del);
+
+        return updTime(apply);
+        //纳秒目前不需要
+        //parse.getNano();
+    }
+
+    public DaidaLocalDateTime addYMD(String dateString,boolean del){
+        return addTime(dateString,null,del);
+    }
+
+    public DaidaLocalDateTime addHMS(String timeString,boolean del){
+        return addTime(null,timeString,del);
+    }
+
+    public DaidaLocalDateTime addYMD(String dateString){
+        return addYMD(dateString,false);
+    }
+
+    public DaidaLocalDateTime addHMS(String timeString){
+        return addHMS(timeString,false);
+    }
+
+    private void setInts(String string,int[] apply,int i,boolean del){
+        if (Objects.isNull(string) || string.trim().isEmpty()) return;
+        StringBuilder stringBuilder = new StringBuilder();
+        int length = string.length();
+        AtomicInteger setInt = new AtomicInteger(i);
+        IntStream.range(0,length).forEach(e-> {
+            String c = String.valueOf(string.charAt(e));
+            if(Arrays.asList(Invariable.WHIPPTREE.toString(), Invariable.COLON.toString(), Invariable.SPACE.toString()).contains(c)){
+                push(stringBuilder,del,setInt,apply);
+            }else{
+                stringBuilder.append(c);
+            }
+        });
+
+        //执行完毕在push一下
+        if(stringBuilder.length()>0){ push(stringBuilder,del,setInt,apply); }
+
+    }
+
+    private void push(StringBuilder stringBuilder,boolean del,AtomicInteger setInt,int[] apply){
+        int i1 = Integer.parseInt(stringBuilder.toString());
+        if(del) i1 = BigDecimalUtil.quFan.apply(i1);
+        apply[setInt.get()] = i1;
+        setInt.addAndGet(1);
+        stringBuilder.delete(0,stringBuilder.length());
     }
 }

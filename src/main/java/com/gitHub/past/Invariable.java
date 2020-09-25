@@ -22,7 +22,10 @@ public enum Invariable {
     MSG("msg"),
 
 
-    EMPTY("")
+    EMPTY(""),
+    COLON(":"),
+    WHIPPTREE("-"),
+    SPACE(" ")
     ;
 
 

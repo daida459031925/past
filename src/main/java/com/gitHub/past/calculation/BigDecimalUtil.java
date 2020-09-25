@@ -87,9 +87,11 @@ public class BigDecimalUtil {
     //        System.out.println("mData=" + mData);
     //----结果：----- mData=9.66
 
-
+    public static Function<Integer,Integer> quFan = (a)-> ~a+1;
 
     public static void main(String[] args) {
+        quFan.apply(1);
+
         SysFun.sysPrintln.accept(round_ceiling.apply("2.341"));
         SysFun.sysPrintln.accept(round_floor.apply("-2.311"));
         SysFun.sysPrintln.accept(round_floor.apply("2.391"));

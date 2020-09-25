@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.logging.Level;
@@ -102,9 +103,22 @@ public class DateUtil {
         return ((equal && (start1.equals(end2) || start2.equals(end1))) || (start1 < end2 && start2 < end1));
     };
 
-    public boolean isTime(LocalDateTime startTime1, LocalDateTime endTime1, LocalDateTime startTime2, LocalDateTime endTime2) {
+    public static boolean isTime(LocalDateTime startTime1, LocalDateTime endTime1, LocalDateTime startTime2, LocalDateTime endTime2) {
         return isTime.test(startTime1, endTime1, startTime2, endTime2, false);
     }
+
+    public static Function<LocalDateTime,int[]> getTimesInt = (ldt) -> {
+        int[] ints = new int[6];
+        Optional.ofNullable(ldt).ifPresent(e->{
+            ints[0] = e.getYear();
+            ints[1] = e.getMonthValue();
+            ints[2] = e.getDayOfMonth();
+            ints[3] = e.getHour();
+            ints[4] = e.getMinute();
+            ints[5] = e.getSecond();
+        });
+        return ints;
+    };
 
 //    public static BiFunction<String,DateTimeFormatter,LocalDateTime> parse1 = (s1,s2)->;
 
@@ -127,6 +141,7 @@ public class DateUtil {
     public static void main(String[] args) {
         LocalDateTime now = LocalDateTime.now();
         DaidaLocalDateTime s = new DaidaLocalDateTime(now);
+        s.addTime("4000","20",false);
         s.updTime(1,2,3,4,5,6,7);
         Logger.getAnonymousLogger().log(Level.INFO, LocalDate.now().toString());
         Logger.getAnonymousLogger().log(Level.INFO, LocalDateTime.now().toString());

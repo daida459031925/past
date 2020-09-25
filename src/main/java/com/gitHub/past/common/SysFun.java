@@ -5,4 +5,28 @@ import java.util.function.Consumer;
 public class SysFun {
 
     public static Consumer<Object> sysPrintln = System.out::println;
+
+//    java反射
+//    public class Test {
+//        public void method1() {
+//            System.out.println("method1() invoked");
+//        }
+//
+//        public void method2() {
+//            System.out.println("method2() invoked");
+//        }
+//
+//        public void method3() {
+//            System.out.println("method3() invoked");
+//        }
+//
+//        public void invokeMethod(String methodName) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+//            Test.class.getMethod(methodName,null).invoke(this,null);
+//        }
+//
+//        public static void main(String[] args) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+//            new Test().invokeMethod("method2");
+//        }
+//
+//    }
 }
