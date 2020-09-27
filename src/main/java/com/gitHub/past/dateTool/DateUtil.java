@@ -58,7 +58,7 @@ public class DateUtil {
     public static Function<Date, LocalDateTime> getLdtParseDate = (date) -> getSdfParseldt(sdfY_M_D_H_M_S.format(date), sdfY_M_D_H_M_S);
     public static BiFunction<LocalDate,LocalTime,LocalDateTime> getLdtDateTime = LocalDateTime::of;
 
-    //通用时间解决方案
+    /**通用时间解决方案*/
     public static LocalDateTime getSdfParseldt(String string, SimpleDateFormat sdf) {
         try {
             return getLdtParseStr.apply(sdfY_M_D_H_M_S.format(sdf.parse(string)));
@@ -87,7 +87,7 @@ public class DateUtil {
     /**
      * 判断两个时间是否存在传入的时间交集
      * 【startTime - endTime】
-     * ⬆
+     *            ⬆
      * 【startTime - endTime】
      */
     public static BiPredicateDouble<LocalDateTime, LocalDateTime, LocalDateTime, LocalDateTime, Boolean> isTime = (startTime1, endTime1, startTime2, endTime2, equal) -> {
@@ -107,15 +107,16 @@ public class DateUtil {
         return isTime.test(startTime1, endTime1, startTime2, endTime2, false);
     }
 
+    /**根据LocalDateTime 来返还需要添加的年月日十分秒数组*/
     public static Function<LocalDateTime,int[]> getTimesInt = (ldt) -> {
         int[] ints = new int[6];
         Optional.ofNullable(ldt).ifPresent(e->{
-            ints[0] = e.getYear();
-            ints[1] = e.getMonthValue();
-            ints[2] = e.getDayOfMonth();
-            ints[3] = e.getHour();
-            ints[4] = e.getMinute();
-            ints[5] = e.getSecond();
+            ints[0] = e.getYear();//年
+            ints[1] = e.getMonthValue();//月
+            ints[2] = e.getDayOfMonth();//日
+            ints[3] = e.getHour();//时
+            ints[4] = e.getMinute();//分
+            ints[5] = e.getSecond();//秒
         });
         return ints;
     };
