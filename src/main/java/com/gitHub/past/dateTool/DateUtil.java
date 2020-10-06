@@ -1,14 +1,18 @@
 package com.gitHub.past.dateTool;
 
 import com.gitHub.past.Invariable;
+import com.gitHub.past.calculation.BigDecimalUtil;
 import com.gitHub.past.common.BiPredicateDouble;
+import com.gitHub.past.common.CiFunction;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.logging.Level;
@@ -56,9 +60,11 @@ public class DateUtil {
     //只能把他用作dtfY_M_D_H_M_S
     private static Function<String, LocalDateTime> getLdtParseStr = (string) -> LocalDateTime.parse(string, dtfY_M_D_H_M_S);
     public static Function<Date, LocalDateTime> getLdtParseDate = (date) -> getSdfParseldt(sdfY_M_D_H_M_S.format(date), sdfY_M_D_H_M_S);
-    public static BiFunction<LocalDate,LocalTime,LocalDateTime> getLdtDateTime = LocalDateTime::of;
+    public static BiFunction<LocalDate, LocalTime, LocalDateTime> getLdtDateTime = LocalDateTime::of;
 
-    /**通用时间解决方案*/
+    /**
+     * 通用时间解决方案
+     */
     public static LocalDateTime getSdfParseldt(String string, SimpleDateFormat sdf) {
         try {
             return getLdtParseStr.apply(sdfY_M_D_H_M_S.format(sdf.parse(string)));
@@ -87,7 +93,7 @@ public class DateUtil {
     /**
      * 判断两个时间是否存在传入的时间交集
      * 【startTime - endTime】
-     *            ⬆
+     * ⬆
      * 【startTime - endTime】
      */
     public static BiPredicateDouble<LocalDateTime, LocalDateTime, LocalDateTime, LocalDateTime, Boolean> isTime = (startTime1, endTime1, startTime2, endTime2, equal) -> {
@@ -107,10 +113,12 @@ public class DateUtil {
         return isTime.test(startTime1, endTime1, startTime2, endTime2, false);
     }
 
-    /**根据LocalDateTime 来返还需要添加的年月日十分秒数组*/
-    public static Function<LocalDateTime,int[]> getTimesInt = (ldt) -> {
+    /**
+     * 根据LocalDateTime 来返还需要添加的年月日十分秒数组
+     */
+    public static Function<LocalDateTime, int[]> getTimesInt = (ldt) -> {
         int[] ints = new int[6];
-        Optional.ofNullable(ldt).ifPresent(e->{
+        Optional.ofNullable(ldt).ifPresent(e -> {
             ints[0] = e.getYear();//年
             ints[1] = e.getMonthValue();//月
             ints[2] = e.getDayOfMonth();//日
@@ -119,6 +127,56 @@ public class DateUtil {
             ints[5] = e.getSecond();//秒
         });
         return ints;
+    };
+
+    /**
+     * 获取开始日期和结束日期之间间隔的每一天
+     * 含头含尾
+     * */
+    public static BiFunction<LocalDate, LocalDate, Set<LocalDate>> getAllDate = (startLd,endLd) -> {
+        Set<LocalDate> localDateSet = new LinkedHashSet<>();
+        boolean tf = true;
+        int i = 0;
+        do {
+            localDateSet.add(startLd.plusDays(i));
+            if(startLd.equals(endLd)){
+                tf = false;
+            }else {
+                i ++;
+            }
+        }while (tf);
+
+        return localDateSet;
+    };
+
+    /**
+     * 获取开始时间和结束时间之间间隔的每个时间段
+     * 含头含尾
+     * int 按照多少分钟分开
+     * */
+    public static CiFunction<LocalTime, LocalTime, Integer, Set<LocalTime>> getAllTime = (startLt, endLt, interval) -> {
+        Set<LocalTime> localTimeSet = new LinkedHashSet<>();
+        boolean tf = true;
+        int i = 0;
+        do {
+            if(interval == null || interval == 0){
+                //直接返还，无法切割
+                return localTimeSet;
+            }
+
+            if(interval < 0){
+                interval = BigDecimalUtil.abs.apply(interval.toString()).intValue();
+            }
+
+            localTimeSet.add(startLt.plusDays(i));
+            if(startLd.equals(endLd)){
+                tf = false;
+            }else {
+                i ++;
+            }
+        }while (tf);
+
+        return localDateSet;
     };
 
 //    public static BiFunction<String,DateTimeFormatter,LocalDateTime> parse1 = (s1,s2)->;
@@ -142,8 +200,8 @@ public class DateUtil {
     public static void main(String[] args) {
         LocalDateTime now = LocalDateTime.now();
         DaidaLocalDateTime s = new DaidaLocalDateTime(now);
-        s.addTime("4000","20",false);
-        s.updTime(1,2,3,4,5,6,7);
+        s.addTime("4000", "20", false);
+        s.updTime(1, 2, 3, 4, 5, 6, 7);
         Logger.getAnonymousLogger().log(Level.INFO, LocalDate.now().toString());
         Logger.getAnonymousLogger().log(Level.INFO, LocalDateTime.now().toString());
         Logger.getAnonymousLogger().log(Level.INFO, LocalTime.now().toString());
