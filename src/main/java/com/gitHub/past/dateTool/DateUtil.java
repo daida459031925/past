@@ -151,34 +151,74 @@ public class DateUtil {
 
     /**
      * 获取开始时间和结束时间之间间隔的每个时间段
-     * 含头含尾
+     * 含头含尾    不足舍弃
      * int 按照多少分钟分开
      * */
     public static CiFunction<LocalTime, LocalTime, Integer, Set<LocalTime>> getAllTime = (startLt, endLt, interval) -> {
         Set<LocalTime> localTimeSet = new LinkedHashSet<>();
         boolean tf = true;
-        int i = 0;
+
+        if(interval == null || interval == 0){
+            //直接返还，无法切割
+            return localTimeSet;
+        }
+
+        if(interval < 0){
+            interval = BigDecimalUtil.abs.apply(interval.toString()).intValue();
+        }
+
+        LocalDateTime of = LocalDateTime.of(LocalDate.now(), startLt);
+
+        localTimeSet.add(startLt);
+
         do {
-            if(interval == null || interval == 0){
-                //直接返还，无法切割
-                return localTimeSet;
-            }
+            LocalDateTime end = LocalDateTime.of(LocalDate.now(), endLt);
 
-            if(interval < 0){
-                interval = BigDecimalUtil.abs.apply(interval.toString()).intValue();
-            }
+            of = of.plusMinutes(interval);
 
-            localTimeSet.add(startLt.plusDays(i));
-            if(startLd.equals(endLd)){
+            if(of.compareTo(end) > 0){
                 tf = false;
             }else {
-                i ++;
+                localTimeSet.add(of.toLocalTime());
             }
         }while (tf);
 
-        return localDateSet;
+        return localTimeSet;
     };
 
+    /**
+     * 获取开始时间和结束时间之间间隔的每个时间段
+     * 含头含尾    不足舍弃
+     * int 按照多少秒分开
+     * */
+    public static CiFunction<LocalDateTime, LocalDateTime, Integer, Set<LocalDateTime>> getAllDateTime = (startLt, endLt, interval) -> {
+        Set<LocalDateTime> localTimeSet = new LinkedHashSet<>();
+        boolean tf = true;
+
+        if(interval == null || interval == 0){
+            //直接返还，无法切割
+            return localTimeSet;
+        }
+
+        if(interval < 0){
+            interval = BigDecimalUtil.abs.apply(interval.toString()).intValue();
+        }
+
+        localTimeSet.add(startLt);
+
+        do {
+
+            startLt = startLt.plusSeconds(interval);
+
+            if(startLt.compareTo(endLt) > 0){
+                tf = false;
+            }else {
+                localTimeSet.add(startLt);
+            }
+        }while (tf);
+
+        return localTimeSet;
+    };
 //    public static BiFunction<String,DateTimeFormatter,LocalDateTime> parse1 = (s1,s2)->;
 
 
@@ -198,6 +238,11 @@ public class DateUtil {
 //    };
 
     public static void main(String[] args) {
+//        getAllTime.apply(LocalTime.of(0,0,0),LocalTime.of(23,59,59),60);
+        getAllDateTime.apply(LocalDateTime.of(2020,10,14,0,0,0),
+                LocalDateTime.of(2020,10,15,23,59,59),600);
+
+
         LocalDateTime now = LocalDateTime.now();
         DaidaLocalDateTime s = new DaidaLocalDateTime(now);
         s.addTime("4000", "20", false);
