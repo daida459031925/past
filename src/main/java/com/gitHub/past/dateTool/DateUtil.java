@@ -219,6 +219,12 @@ public class DateUtil {
 
         return localTimeSet;
     };
+
+    /**
+     * 获取两个时间之间相差的时间
+     */
+    public static BiFunction<LocalDateTime,LocalDateTime,Duration> duration = Duration::between;
+
 //    public static BiFunction<String,DateTimeFormatter,LocalDateTime> parse1 = (s1,s2)->;
 
 
