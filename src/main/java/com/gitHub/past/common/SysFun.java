@@ -10,6 +10,11 @@ public class SysFun {
     public static Logger logger = Logger.getGlobal();  //java.util.logging.Logger
 
     public static Consumer<String> loginfo = (string)-> logger.info(string);
+
+//    CPU 密集型：线程数量=cpu核心数量
+//    IO 密集型：线程数量=cpu核心数量*2
+    public static int nThreads = Runtime.getRuntime().availableProcessors();
+
 //    java反射
 //    public class Test {
 //        public void method1() {

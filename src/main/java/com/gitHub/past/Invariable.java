@@ -25,7 +25,16 @@ public enum Invariable {
     EMPTY(""),
     COLON(":"),
     WHIPPTREE("-"),
-    SPACE(" ")
+    SPACE(" "),
+    SPOT("."),
+    CLASS("class"),
+    JAR("jar"),
+    DCLASS(".class"),
+    XIEGANG("/"),
+
+    PAST("past"),
+    PROPERTIES("properties"),
+    POOL_MAX("poolMax")
     ;
 
 
