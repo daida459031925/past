@@ -13,7 +13,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 
-/**除构造方法外，提供两个public方法 void packageScanner(Class<?> klass)
+/**除构造方法外，提供两个public方法 void packageScanner(Class\<\?\> klass)
  *和 void packageScanner(String packageName)
  *扫描出  给定类所在包  或  给定包路径  下的所有的类 （用到递归）
  *用抽象方法提供给工具使用者去决定 如何处理扫描出的类
