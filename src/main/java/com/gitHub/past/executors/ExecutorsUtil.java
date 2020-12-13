@@ -153,17 +153,20 @@ public abstract class ExecutorsUtil {
         return uuid;
     }
 
-    protected List<String> setCallable(Callable... callable) {
+    protected List<String> setCallable(List<Callable<?>> callable) {
         List<String> list = new LinkedList<>();
         if (Objects.nonNull(callable)) {
-            for(Callable call :callable){
+            callable.forEach(e->{
+                Future<?> submit = null;
+                String key = UUID.randomUUID().toString() + System.currentTimeMillis();
+                if(Objects.nonNull(e)){
+                    submit = scheduledThreadPool.submit(e);
 
-            }
-            UUID.randomUUID().toString() + System.currentTimeMillis();
-            Future<T> submit = scheduledThreadPool.submit(callable);
-            msf.put(uuid, submit);
+                }
+                msf.put(key, submit);
+            });
         }
-        return uuid;
+        return list;
     }
 
     /**

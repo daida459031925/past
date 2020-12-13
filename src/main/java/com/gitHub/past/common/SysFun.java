@@ -1,13 +1,17 @@
 package com.gitHub.past.common;
 
+
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 public class SysFun {
 
+    /**
+     * 系统打印输出
+     */
     public static Consumer<Object> sysPrintln = System.out::println;
 
-    public static Logger logger = Logger.getGlobal();  //java.util.logging.Logger
+    private static Logger logger = Logger.getGlobal();  //java.util.logging.Logger
 
     public static Consumer<String> loginfo = (string)-> logger.info(string);
 

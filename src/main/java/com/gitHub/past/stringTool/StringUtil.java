@@ -17,6 +17,10 @@ public class StringUtil {
         return new StringUtil(Optional.ofNullable(string).map(e->toString.apply(e)).orElse(Invariable.EMPTY.toString()));
     }
 
+    public static StringUtil getTrimString(Object string){
+        return getString(string).trim();
+    }
+
     public StringUtil trim(){
         str = str.trim();
         return this;
@@ -27,7 +31,11 @@ public class StringUtil {
      * 但是“A B”不算
      */
     public Boolean isEmpty (){
-        return this.str.length()<=0;
+        return this.str.length() <= 0;
+    }
+
+    public Boolean isNotEmpty (){
+        return this.str.length() > 0;
     }
 
     /**

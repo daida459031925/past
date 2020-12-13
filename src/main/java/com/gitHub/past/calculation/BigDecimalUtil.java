@@ -15,6 +15,20 @@ import java.util.function.Function;
  */
 public class BigDecimalUtil {
 
+    //2.BigDecimal类常用方法
+    //2.1.BigDecimal(String val)：构造方法，将String类型转换成BigDecimal类型数据。
+    //2.2.BigDecimal(double val)：构造方法，将double类型转换成BigDecimal类型数据。
+    //2.3.BigDecimal(int val)：构造方法，将int类型转换成BigDecimal类型数据。
+    //2.4.BigDecimal add(BigDecimal value)：加法，求两个BigDecimal类型数据的和。
+    //2.5.BigDecimal subtract(BigDecimal value)：减法，求两个BigDecimal类型数据的差。
+    //2.6.BigDecimal multiply(BigDecimal  value)：乘法，求两个BigDecimal类型数据的积。
+    //2.7.BigDecimal divide(BigDecimal divisor)：除法，求两个BigDecimal类型数据的商。
+    //2.8.BigDecimal remainder(BigDecimal divisor)：求余数，求BigDecimal类型数据除以divisor的余数。
+    //2.9.BigDecimal max(BigDecimal value)：最大数，求两个BigDecimal类型数据的最大值。
+    //2.10.BigDecimal min(BigDecimal value)：最小数，求两个BigDecimal类型数据的最小值。
+    //2.11.BigDecimal abs()：绝对值，求BigDecimal类型数据的绝对值。
+    //2.12.BigDecimal negate()：相反数，求BigDecimal类型数据的相反数。
+
     /**
      * 示例 ：
      * "0.00":

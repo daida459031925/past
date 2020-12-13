@@ -31,6 +31,21 @@ public enum Invariable {
     JAR("jar"),
     DCLASS(".class"),
     XIEGANG("/"),
+    ERROR("error"),
+
+    /**消息头类型*/
+    CONTENT_TYPE("Content-Type"),
+    APPLICATION_JSON("application/json;charset=UTF-8"),
+
+    /**oauth2*/
+    OAUTH("/oauth/**"),
+    AUTHORIZE("/oauth/authorize"),
+    CODE("code"),
+    ORDER("order"),
+    UNAUTHORIZED("Unauthorized"),
+    INVALID_ACCESS_TOKEN("Invalid access token"),
+    INTERNAL_SERVER_ERROR("Internal Server Error"),
+    ACCESS_IS_DENIED("Access is denied"),
 
     PAST("past"),
     PROPERTIES("properties"),

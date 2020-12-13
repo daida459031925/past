@@ -7,11 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 public class PropertyUtil {
 
-    private static final Logger logger = SysFun.logger;
     private static Properties props;
 
     static {
@@ -19,7 +17,7 @@ public class PropertyUtil {
     }
 
     synchronized static private void loadProps() {
-        logger.info("开始加载properties文件内容.......");
+        SysFun.loginfo.accept("开始加载properties文件内容.......");
         props = new Properties();
         //<!--第一种，通过类加载器进行获取properties文件流-- >
         try (InputStream in = PropertyUtil.class.getClassLoader().getResourceAsStream(
@@ -28,14 +26,14 @@ public class PropertyUtil {
             //<!--第二种，通过类进行获取properties文件流-- >
             //in = PropertyUtil.class.getResourceAsStream("/jdbc.properties");
             props.load(in);
-            logger.info("加载properties文件内容完成...........");
-            logger.info("properties文件内容：" + props);
+            SysFun.loginfo.accept("加载properties文件内容完成...........");
+            SysFun.loginfo.accept("properties文件内容：" + props);
         } catch (FileNotFoundException e) {
-            logger.info("jdbc.properties文件未找到");
+            SysFun.loginfo.accept("jdbc.properties文件未找到");
         } catch (IOException e) {
-            logger.info("出现IOException");
+            SysFun.loginfo.accept("出现IOException");
         } catch (Exception e){
-            logger.info("未知异常");
+            SysFun.loginfo.accept("未知异常");
         }
     }
 

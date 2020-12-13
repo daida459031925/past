@@ -1,9 +1,7 @@
 package com.gitHub.past.listTool;
 
 import com.gitHub.past.common.DefOptional;
-import com.gitHub.past.common.SysFun;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
