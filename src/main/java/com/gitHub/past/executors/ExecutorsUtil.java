@@ -24,9 +24,7 @@ import java.util.function.Supplier;
  * 定义的bean被限定于全局portlet Session的生命周期范围内。如果你在web中使用global session作用域来标识bean，那么web会自动当成session类型来使用。
  */
 
-/**
- * @Scope("singleton") //spring boot 中定义单例模式
- */
+//@Scope("singleton") //spring boot 中定义单例模式
 public abstract class ExecutorsUtil {
 
     //静态工厂方法
