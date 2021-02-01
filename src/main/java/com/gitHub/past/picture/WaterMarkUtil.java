@@ -7,6 +7,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 图片添加水印
@@ -30,8 +33,8 @@ public class WaterMarkUtil {
      * @param srcImgPath 源图片路径
      * @param targetPath 目标图片路径
      */
-    public static void markImage(String text, String srcImgPath, String targetPath) {
-        markImage(text, srcImgPath, targetPath, null);
+    public static void markImage(String text, String srcImgPath, String targetPath,Integer wz) {
+        markImage(text, srcImgPath, targetPath, null,wz);
     }
 
     /**
@@ -41,8 +44,9 @@ public class WaterMarkUtil {
      * @param srcImgPath 源图片路径
      * @param targetPath 目标图片路径
      * @param degree 水印旋转
+     * @param wz 水印位置 location 位置： 1、左上角，2、右上角，3、左下角，4、右下角，5、中间
      */
-    public static void markImage(String text, String srcImgPath, String targetPath, Integer degree) {
+    public static void markImage(String text, String srcImgPath, String targetPath, Integer degree,Integer wz) {
 
         OutputStream os = null;
         try {
@@ -74,9 +78,48 @@ public class WaterMarkUtil {
             g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, alpha));
             // 8、第一参数->设置的内容，后面两个参数->文字在图片上的坐标位置(x,y)
 
+            //水印的宽高
+            Map<String, Integer> watermarkLength = getWatermarkLength(text, g);
+            int syHeight = watermarkLength.get("height");
+            int syWidth = watermarkLength.get("width");
+
+            // 如果水印图片高或宽大于目标图片是做的处理，使水印宽或高等于目标图片的宽高，并且等比例缩放
+            if (syWidth > imgWidth) {
+                syWidth = imgWidth;
+                syHeight = (int) ((double)syWidth / syWidth * imgHeight);
+            }
+
+            if (syHeight > imgHeight) {
+                syHeight = imgHeight;
+                syWidth = (int) ((double)syHeight / syHeight * syWidth);
+            }
+
+            // 根据位置参数确定坐标位置
+            int x = 0, y = 0;
+            // location 位置： 1、左上角，2、右上角，3、左下角，4、右下角，5、中间
+            switch (wz) {
+                case 1:
+                    y = syHeight;
+                    break;
+                case 2:
+                    x = imgWidth - syWidth;
+                    y = syHeight;
+                    break;
+                case 3:
+                    y = imgHeight - syHeight;
+                    break;
+                case 4:
+                    x = imgWidth - syWidth;
+                    y = imgHeight - syHeight;
+                    break;
+                case 5:
+                    x = (imgWidth - syWidth) / 2;
+                    y = (imgHeight - syHeight) / 2;
+                    break;
+                default: break;
+            }
+
             //设置水印的坐标
-            int x = imgWidth - 2*getWatermarkLength(text, g);
-            int y = imgHeight - 2*getWatermarkLength(text, g);
             g.drawString(text, x, y);  //画出水印
 //            g.drawString(text, positionWidth, positionHeight);
             // 9、释放资源
@@ -145,23 +188,26 @@ public class WaterMarkUtil {
     }
 
     public static void main(String[] args) {
-        String srcImgPath = "/home/sga/图片/2020-05-20 14-34-41 的屏幕截图.jpg";
-        String text = "hello world";
+        String srcImgPath = "/home/sga/图片/2020-05-22 15-01-21 的屏幕截图.png";
+        String text = LocalDateTime.now().toString();
 
-        String targerTextPath = "/home/sga/图片/002--1.jpg";
-        String targerTextPath2 = "/home/sga/图片/002--2.jpg";
+        String targerTextPath = "/home/sga/图片/002--1.png";
+        String targerTextPath2 = "/home/sga/图片/002--2.png";
 
         System.out.println("给图片添加水印文字开始...");
         // 给图片添加水印文字
-        markImage(text, srcImgPath, targerTextPath);
+        markImage(text, srcImgPath, targerTextPath,4);
         // 给图片添加水印文字,水印文字旋转-45
-        markImage(text, srcImgPath, targerTextPath2, -45);
+        markImage(text, srcImgPath, targerTextPath2, -0,5);
         System.out.println("给图片添加水印文字结束...");
 
     }
 
-    public static int getWatermarkLength(String waterMarkContent, Graphics2D g) {
-        return g.getFontMetrics(g.getFont()).charsWidth(waterMarkContent.toCharArray(), 0, waterMarkContent.length());
+    public static Map<String,Integer> getWatermarkLength(String waterMarkContent, Graphics2D g) {
+        Map<String,Integer> map = new HashMap<>();
+        FontMetrics fontMetrics = g.getFontMetrics(g.getFont());
+        map.put("height",fontMetrics.getHeight());
+        map.put("width",fontMetrics.charsWidth(waterMarkContent.toCharArray(), 0, waterMarkContent.length()));
+        return map;
     }
 }
-
