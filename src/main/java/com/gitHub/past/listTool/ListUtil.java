@@ -2,6 +2,8 @@ package com.gitHub.past.listTool;
 
 import com.gitHub.past.common.DefOptional;
 
+import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -154,4 +156,43 @@ public class ListUtil<T, R, XT> {
         return collect4;
     };
 
+    private static BiFunction<Long,Long,List<Long>> offset = (offset, limit) -> {
+        long thisPath = BigDecimal.valueOf(offset).divide(BigDecimal.valueOf(limit)).setScale(0, BigDecimal.ROUND_UP).longValue();
+        return Arrays.asList((thisPath + 1) * limit,thisPath * limit);
+    };
+
+    private static BiFunction<Long,Long,List<Long>> page = (page,limit) -> Arrays.asList((page + 1) * limit,page * limit);
+
+
+    /***
+     *
+     * @param offset  传入的起始查看当前页的第一个数值
+     * @param limit   传入的是每页多少数据
+     * @param list    传入的需要分页的数据
+     * @param <T>     传入什么类型返还什么类型
+     * @return        又返还值
+     */
+    public static <T> List<T> getFenYeList(long offset,long limit, List<T> list){
+        //java8中分页需要使用limit limit 是0～<limit 的数值   而skip是    xxx>= skip 的数值
+        long thisPath = BigDecimal.valueOf(offset).divide(BigDecimal.valueOf(limit)).setScale(0, BigDecimal.ROUND_UP).longValue();
+        //计算公式
+        List<Long> apply = Arrays.asList((thisPath + 1) * limit,thisPath * limit);
+        List<T> collect = list.stream().limit(apply.get(0)).skip(apply.get(1)).collect(Collectors.toList());
+        return collect;
+    }
+
+
+    /***
+     *
+     * @param page    传入的起始页数
+     * @param limit   传入的是每页多少数据
+     * @param list    传入的需要分页的数据
+     * @param <T>     传入什么类型返还什么类型
+     * @return        又返还值
+     */
+    public static <T> List<T> getFenYeList(Long page,Long limit, List<T> list){
+        List<Long> apply = Arrays.asList((page + 1) * limit,page * limit);
+        List<T> collect = list.stream().limit(apply.get(0)).skip(apply.get(1)).collect(Collectors.toList());
+        return collect;
+    }
 }
