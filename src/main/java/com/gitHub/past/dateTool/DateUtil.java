@@ -9,6 +9,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Optional;
@@ -132,19 +133,19 @@ public class DateUtil {
     /**
      * 获取开始日期和结束日期之间间隔的每一天
      * 含头含尾
-     * */
-    public static BiFunction<LocalDate, LocalDate, Set<LocalDate>> getAllDate = (startLd,endLd) -> {
+     */
+    public static BiFunction<LocalDate, LocalDate, Set<LocalDate>> getAllDate = (startLd, endLd) -> {
         Set<LocalDate> localDateSet = new LinkedHashSet<>();
         boolean tf = true;
         int i = 0;
         do {
             localDateSet.add(startLd.plusDays(i));
-            if(startLd.equals(endLd)){
+            if (startLd.equals(endLd)) {
                 tf = false;
-            }else {
-                i ++;
+            } else {
+                i++;
             }
-        }while (tf);
+        } while (tf);
 
         return localDateSet;
     };
@@ -153,17 +154,17 @@ public class DateUtil {
      * 获取开始时间和结束时间之间间隔的每个时间段
      * 含头含尾    不足舍弃
      * int 按照多少分钟分开
-     * */
+     */
     public static CiFunction<LocalTime, LocalTime, Integer, Set<LocalTime>> getAllTime = (startLt, endLt, interval) -> {
         Set<LocalTime> localTimeSet = new LinkedHashSet<>();
         boolean tf = true;
 
-        if(interval == null || interval == 0){
+        if (interval == null || interval == 0) {
             //直接返还，无法切割
             return localTimeSet;
         }
 
-        if(interval < 0){
+        if (interval < 0) {
             interval = BigDecimalUtil.abs.apply(interval.toString()).intValue();
         }
 
@@ -176,12 +177,12 @@ public class DateUtil {
 
             of = of.plusMinutes(interval);
 
-            if(of.compareTo(end) > 0){
+            if (of.compareTo(end) > 0) {
                 tf = false;
-            }else {
+            } else {
                 localTimeSet.add(of.toLocalTime());
             }
-        }while (tf);
+        } while (tf);
 
         return localTimeSet;
     };
@@ -190,17 +191,17 @@ public class DateUtil {
      * 获取开始时间和结束时间之间间隔的每个时间段
      * 含头含尾    不足舍弃
      * int 按照多少秒分开
-     * */
+     */
     public static CiFunction<LocalDateTime, LocalDateTime, Integer, Set<LocalDateTime>> getAllDateTime = (startLt, endLt, interval) -> {
         Set<LocalDateTime> localTimeSet = new LinkedHashSet<>();
         boolean tf = true;
 
-        if(interval == null || interval == 0){
+        if (interval == null || interval == 0) {
             //直接返还，无法切割
             return localTimeSet;
         }
 
-        if(interval < 0){
+        if (interval < 0) {
             interval = BigDecimalUtil.abs.apply(interval.toString()).intValue();
         }
 
@@ -210,12 +211,12 @@ public class DateUtil {
 
             startLt = startLt.plusSeconds(interval);
 
-            if(startLt.compareTo(endLt) > 0){
+            if (startLt.compareTo(endLt) > 0) {
                 tf = false;
-            }else {
+            } else {
                 localTimeSet.add(startLt);
             }
-        }while (tf);
+        } while (tf);
 
         return localTimeSet;
     };
@@ -223,7 +224,7 @@ public class DateUtil {
     /**
      * 获取两个时间之间相差的时间
      */
-    public static BiFunction<LocalDateTime,LocalDateTime,Duration> duration = Duration::between;
+    public static BiFunction<LocalDateTime, LocalDateTime, Duration> duration = Duration::between;
 
 //    public static BiFunction<String,DateTimeFormatter,LocalDateTime> parse1 = (s1,s2)->;
 
@@ -243,10 +244,22 @@ public class DateUtil {
 //        }
 //    };
 
+    /**
+     * 获取当前周的周一是哪一天
+     */
+    public static Function<LocalDateTime, LocalDateTime> monday = (todayOfLastWeek) ->
+            todayOfLastWeek.with(TemporalAdjusters.previous(DayOfWeek.SUNDAY)).plusDays(1);
+
+    /**
+     * 获取当前周的周日是哪一天
+     */
+    public static Function<LocalDateTime, LocalDateTime> sunday = (todayOfLastWeek) ->
+            todayOfLastWeek.with(TemporalAdjusters.next(DayOfWeek.MONDAY)).minusDays(1);
+
     public static void main(String[] args) {
 //        getAllTime.apply(LocalTime.of(0,0,0),LocalTime.of(23,59,59),60);
-        getAllDateTime.apply(LocalDateTime.of(2020,10,14,0,0,0),
-                LocalDateTime.of(2020,10,15,23,59,59),600);
+        getAllDateTime.apply(LocalDateTime.of(2020, 10, 14, 0, 0, 0),
+                LocalDateTime.of(2020, 10, 15, 23, 59, 59), 600);
 
 
         LocalDateTime now = LocalDateTime.now();
