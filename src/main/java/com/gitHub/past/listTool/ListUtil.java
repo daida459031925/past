@@ -3,9 +3,7 @@ package com.gitHub.past.listTool;
 import com.gitHub.past.common.DefOptional;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -177,8 +175,7 @@ public class ListUtil<T, R, XT> {
         long thisPath = BigDecimal.valueOf(offset).divide(BigDecimal.valueOf(limit)).setScale(0, BigDecimal.ROUND_UP).longValue();
         //计算公式
         List<Long> apply = Arrays.asList((thisPath + 1) * limit,thisPath * limit);
-        List<T> collect = list.stream().limit(apply.get(0)).skip(apply.get(1)).collect(Collectors.toList());
-        return collect;
+        return list.stream().limit(apply.get(0)).skip(apply.get(1)).collect(Collectors.toList());
     }
 
 
@@ -192,7 +189,20 @@ public class ListUtil<T, R, XT> {
      */
     public static <T> List<T> getFenYeList(Long page,Long limit, List<T> list){
         List<Long> apply = Arrays.asList((page + 1) * limit,page * limit);
-        List<T> collect = list.stream().limit(apply.get(0)).skip(apply.get(1)).collect(Collectors.toList());
-        return collect;
+        return list.stream().limit(apply.get(0)).skip(apply.get(1)).collect(Collectors.toList());
     }
+
+    /**
+     *
+     * @param list       传入对应需要按指定条件去重
+     * @param comparator 去重的条件
+     * @param <T>
+     * @return
+     */
+    public static <T> List<T> distinctComparing(List<T> list,Comparator<T> comparator){
+        return list.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() ->
+                new TreeSet<T>(comparator)), ArrayList::new));
+    }
+
+
 }
