@@ -204,5 +204,10 @@ public class ListUtil<T, R, XT> {
                 new TreeSet<T>(comparator)), ArrayList::new));
     }
 
+    /**
+     * 拿到最后一个list的数据
+     */
+    public static Function<List,Optional> findLast = (list)->
+            list.stream().reduce((first, second) -> second).orElse(new LinkedList<>());
 
 }
