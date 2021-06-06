@@ -2,13 +2,17 @@ package com.gitHub.past.file;
 
 import com.gitHub.past.common.SysFun;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * 默认情况Files类中的所有方法都会使用UTF-8编码进行操作，当你不愿意这么干的时候可以传递Charset参数进去变更
@@ -40,14 +44,22 @@ public class FileUtil {
      * 创建路径
      */
     private Path path;
+    /**
+     * 文件还是文件夹
+     */
     private boolean isFile;
+    /**
+     * 创建对应映射
+     */
+    private File file;
 
     /**
      * @param path /xxxx/xxxx/a.txt
      */
     public FileUtil(String path) {
         this.path = Paths.get(path);
-        this.isFile = isFile();
+        this.file = new File(path);
+        this.isFile = file.isFile();
     }
 
     /**
@@ -138,22 +150,6 @@ public class FileUtil {
     }
 
     /**
-     * 如果是文件
-     * @return
-     */
-    private boolean isFile(){
-        return Files.exists(path);
-    }
-
-    /**
-     * 如果是文件夹
-     * @return
-     */
-    private boolean isDirectory(){
-        return !isFile();
-    }
-
-    /**
      * 读取一个目录下的文件请使用Files.list和Files.walk方法
      */
 
@@ -181,22 +177,28 @@ public class FileUtil {
      * @throws IOException
      */
     public void delete() throws IOException {
-        if(isFile()){
+        /**
+         *listFiles()方法的作用如果file是个文件，则返回的是null，如果file是空目录，返回的是空数组，如果file不是空目录，则返回的是该目录下的文件和目录
+         */
+        File[] files = file.listFiles();
+        Optional.ofNullable(files).ifPresent(v->{
+            if(v.length > 0){
+                Arrays.stream(v).forEach(e->{
+                    FileUtil fileUtil1 = new FileUtil(e.getPath());
+                    try {
+                        fileUtil1.delete();
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
+                });
+            }
+        });
 
-        }
-
-        if(isDirectory()){
-
-        }
-
-        Files.exists(path);
-        if(Files.deleteIfExists(path)){
-            Files.delete(path);
-        }
+        file.delete();
     }
 
     public static void main(String[] args) throws IOException {
-        FileUtil fileUtil = new FileUtil("/home/sga/apache-tomcat-10.0.0-M5/webapps/asd");
+        FileUtil fileUtil = new FileUtil("C:/Users/daida/Desktop/l.txt");
         fileUtil.delete();
         //        byte[] bytes = fileUtil.readFile();
 //        Files.getFileStore(Paths.get("/home/sga/apache-tomcat-10.0.0-M5/webapps/HustElective.war"))

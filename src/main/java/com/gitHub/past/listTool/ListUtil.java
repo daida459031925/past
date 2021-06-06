@@ -208,6 +208,6 @@ public class ListUtil<T, R, XT> {
      * 拿到最后一个list的数据
      */
     public static Function<List,Optional> findLast = (list)->
-            list.stream().reduce((first, second) -> second).orElse(new LinkedList<>());
+        Optional.ofNullable(list).map(e->e.stream().reduce((first, second) -> second)).orElse(Optional.empty());
 
 }
