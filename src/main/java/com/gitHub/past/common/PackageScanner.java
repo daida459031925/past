@@ -24,8 +24,8 @@ import java.util.jar.JarFile;
  * 使用这个扫描还是不能解决我在单独这个项目中实现初始化和类的卸载
  */
 public abstract class PackageScanner {
-//    public PackageScanner() {
-//    }
+    public PackageScanner() {
+    }
 
     public abstract void dealClass(Class<?> klass);
 
