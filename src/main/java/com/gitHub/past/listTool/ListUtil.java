@@ -207,7 +207,8 @@ public class ListUtil<T, R, XT> {
     /**
      * 拿到最后一个list的数据
      */
-    public static Function<List,Optional> findLast = (list)->
-        Optional.ofNullable(list).map(e->e.stream().reduce((first, second) -> second)).orElse(Optional.empty());
+    public static <T> T findLast(List<T> list){
+        return list.stream().reduce((first, second) -> second).orElse(null);
+    }
 
 }
