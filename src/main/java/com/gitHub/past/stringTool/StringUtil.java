@@ -2,6 +2,7 @@ package com.gitHub.past.stringTool;
 
 import com.gitHub.past.Invariable;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -46,4 +47,24 @@ public class StringUtil {
     public static void main(String[] args) {
         System.out.println(StringUtil.getString(null).trim().isEmpty());
     }
+
+
+    /**
+     * 目标是根据传入的字符串换出指定格式内容 例如传入1.1   格式化初“ 1 1”
+     */
+    public static String a(String str,String regex,Integer integer){
+//        正则对象    目前还存在bug
+//        Pattern pattern = Pattern.compile(regExString);
+//
+//        Matcher matcher = pattern.matcher(line);
+
+        String[] split = str.split(regex);
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0;i<split.length ;i++){
+
+            sb.append(String.format("%"+ integer.toString() +"s",split[i]));
+        }
+        return sb.toString();
+    }
+
 }
