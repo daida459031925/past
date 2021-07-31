@@ -31,7 +31,24 @@ public enum Invariable {
     JAR("jar"),
     DCLASS(".class"),
     XIEGANG("/"),
+    YXIEGANG("\\"),
     ERROR("error"),
+
+    /**jvm信息*/
+    //获取当前项目所在的物理路径
+    USERDIR("user.dir"),
+    JAVAVM("java.vm.name"),
+
+    /**当前属于什么系统*/
+    OS("os.name"),
+    MAC("mac"),
+    MACX("mac"),
+    WINDOWS("windows"),
+    LINUX("linux"),
+    X("x"),
+
+    /**正则信息*/
+    SUFFIX("\\w*\\d*\\.\\w*\\d*"),
 
     /**消息头类型*/
     //是Http的实体首部字段，用于说明请求或返回的消息主体是用何种方式编码，在request header和response header里都存在

@@ -1,7 +1,10 @@
 package com.gitHub.past.common;
 
 
+import com.gitHub.past.Invariable;
+
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.logging.Logger;
 
 public class SysFun {
@@ -42,4 +45,14 @@ public class SysFun {
 //        }
 //
 //    }
+
+    public static Supplier<String> getOS = ()-> System.getProperty(Invariable.OS.toString()).toLowerCase();
+
+    public static Supplier<Boolean> isLinux = ()-> getOS.get().contains(Invariable.LINUX.toString());
+    public static Supplier<Boolean> isMacOS = ()-> {String os = getOS.get();return os.contains(Invariable.MAC.toString()) && os.indexOf(Invariable.OS.toString()) > 0 && !os.contains(Invariable.X.toString());};
+    public static Supplier<Boolean> isMacOSX = ()-> {String os = getOS.get();return os.contains(Invariable.MAC.toString()) && os.indexOf(Invariable.OS.toString()) > 0 && os.indexOf(Invariable.X.toString()) > 0;};
+    public static Supplier<Boolean> isWindows = ()-> getOS.get().contains(Invariable.WINDOWS.toString());
+
+    public static Supplier<String> thisUserDir = ()-> System.getProperty(Invariable.USERDIR.toString());
+
 }

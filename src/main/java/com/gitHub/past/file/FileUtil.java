@@ -1,10 +1,12 @@
 package com.gitHub.past.file;
 
+import com.gitHub.past.Invariable;
 import com.gitHub.past.common.SysFun;
+import com.gitHub.past.common.ValidatorUtils;
+import com.gitHub.past.stringTool.StringUtil;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -13,6 +15,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.regex.Pattern;
 
 /**
  * 默认情况Files类中的所有方法都会使用UTF-8编码进行操作，当你不愿意这么干的时候可以传递Charset参数进去变更
@@ -197,9 +203,64 @@ public class FileUtil {
         file.delete();
     }
 
-    public static void main(String[] args) throws IOException {
-        FileUtil fileUtil = new FileUtil("C:/Users/daida/Desktop/l.txt");
-        fileUtil.delete();
+    /**
+     * spring boot 通过ClassPathResource获取resource内自定的libs文件内容
+     * new ClassPathResource("libs/opencv/x64/opencv_java453.dll");
+     * 获取到文件后直接拿到流进行文件加载
+     *
+     * @param inputStream 需要读取的文件流
+     * @param path        指定存放位置必须带有文件名
+     */
+    public static void load(InputStream inputStream,Path path) throws Exception {
+        //根据传入的文件名和文件后缀以及文件存放位置来生成文件
+        ValidatorUtils.of(Objects.isNull(inputStream),"至少需要有输入流")
+                .isApply(Objects.isNull(path),"至少拥有存放路径")
+                .isApply(Pattern.matches(Invariable.SUFFIX.toString(),path.getFileName().toString()),"至少拥有文件名和后缀名")
+                .getError();
+        //从jar中读取文件流
+        Files.copy(inputStream,path);
+
+        //加载库文件
+        System.load(String.valueOf(path.toAbsolutePath()));
+
+        //创建完毕删除临时文件   这个地方是删除不掉的，因为文件在  System.load 占用
+//        Files.delete(path);
+    }
+
+    /**
+     * spring boot 通过ClassPathResource获取resource内自定的libs文件内容
+     * new ClassPathResource("libs/opencv/x64/opencv_java453.dll");
+     * 获取到文件后直接拿到流进行文件加载
+     *
+     * @param inputStream 需要读取的文件流
+     * @param prefix      文件名    xxxx
+     * @param suffix      文件后缀  .XXXX
+     */
+    public static void load(InputStream inputStream,String prefix, String suffix) throws Exception{
+        AtomicReference<String> path = new AtomicReference<>();
+        Supplier<String> sup = ()->{path.set(prefix+suffix);return path.get(); };
+        ValidatorUtils.of(Objects.isNull(prefix),"至少需要有文件名")
+                .isApply(Objects.isNull(suffix),"至少需要有后缀名")
+                .isApply(Pattern.matches(Invariable.SUFFIX.toString(),sup.get()),"至少拥有文件名和后缀名")
+                .getError();
+        load(inputStream,Path.of(path.get()));
+    }
+
+    /**
+     * spring boot 通过ClassPathResource获取resource内自定的libs文件内容
+     * new ClassPathResource("libs/opencv/x64/opencv_java453.dll");
+     * 获取到文件后直接拿到流进行文件加载
+     *
+     * @param inputStream 需要读取的文件流
+     * @param path        文件名    xxxx/xxxx.XXXX
+     */
+    public static void load(InputStream inputStream,String path) throws Exception{
+        load(inputStream,Optional.ofNullable(path).map(e->Path.of(path)).orElse(null));
+    }
+
+    public static void main(String[] args) throws Exception {
+//        FileUtil fileUtil = new FileUtil("C:/Users/daida/Desktop/l.txt");
+//        fileUtil.delete();
         //        byte[] bytes = fileUtil.readFile();
 //        Files.getFileStore(Paths.get("/home/sga/apache-tomcat-10.0.0-M5/webapps/HustElective.war"))
 //        List<String> list = fileUtil.readLineFile();
