@@ -1,12 +1,11 @@
 package com.gitHub.past.file;
 
 import com.gitHub.past.Invariable;
-import com.gitHub.past.common.SysFun;
 import com.gitHub.past.common.ValidatorUtils;
-import com.gitHub.past.stringTool.StringUtil;
 
-import java.io.*;
-import java.nio.file.FileSystem;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,7 +15,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
