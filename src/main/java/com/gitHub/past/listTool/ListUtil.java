@@ -211,4 +211,26 @@ public class ListUtil<T, R, XT> {
         return list.stream().reduce((first, second) -> second).orElse(null);
     }
 
+
+    /**
+     * addAll     并集  这个没问题直接合并 问题是在是否去重
+     * removeAll  差集  差集 a -b  b - a  结果不相同不是一般想要目的  里面存在一个问题就是否所有人都🗡减
+     * 若所有人都有相同数据集才能对最后的数据进行减少，那么可以采用 交集取反的方式达到想要的结果。 若不是那么就和你怎么减的有直接关系
+     * retainAll  交集  经过自己简单测试也可以达到一般目的  多个list里面数据各不相同 那么返还的size为0
+     *
+     * @param elementLists
+     * @param <T>
+     * @return
+     */
+    public static <T> List<T>  retainElementList(List<List<T>> elementLists) {
+        Optional<List<T>> result = elementLists.parallelStream()
+                .filter(elementList -> elementList != null && ((List) elementList).size() != 0)
+                .reduce((a, b) -> {
+                    a.retainAll(b);
+                    return a;
+                });
+        return result.orElse(new ArrayList<>());
+    }
+
+
 }

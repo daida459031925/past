@@ -256,6 +256,19 @@ public class FileUtil {
         load(inputStream,Optional.ofNullable(path).map(e->Path.of(path)).orElse(null));
     }
 
+
+
+    private static Pattern FilePattern = Pattern.compile("[\\s\\.:?<>|]"); //过滤规则
+    /**
+     *包含特殊字符的文件路劲全部进行空替换
+     * 此方法适用于文件路径
+     */
+    public static String filenameFilter(String str) {
+        return str==null?null:FilePattern.matcher(str).replaceAll("");
+    }
+
+
+
     public static void main(String[] args) throws Exception {
 //        FileUtil fileUtil = new FileUtil("C:/Users/daida/Desktop/l.txt");
 //        fileUtil.delete();

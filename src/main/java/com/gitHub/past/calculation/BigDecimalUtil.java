@@ -125,5 +125,34 @@ public class BigDecimalUtil {
         System.out.println("贷款金额:\t" + currency.format(loanAmount)); //贷款金额: ￥150.48
         System.out.println("利率:\t" + percent.format(interestRate));  //利率: 0.8%
         System.out.println("利息:\t" + currency.format(interest)); //利息: ￥1.20
+
+
+        BigDecimal bignum1 = new BigDecimal("16.7");
+        BigDecimal bignum2 = new BigDecimal("5");
+        BigDecimal bignum3 = null;
+
+        //加法
+        bignum3 =  bignum1.add(bignum2);
+        System.out.println("和 是：" + bignum3);
+
+        //减法
+        bignum3 = bignum1.subtract(bignum2);
+        System.out.println("差  是：" + bignum3);
+
+        //乘法
+        bignum3 = bignum1.multiply(bignum2);
+        System.out.println("积  是：" + bignum3);
+
+        //除法
+        bignum3 = bignum1.divide(bignum2);
+        System.out.println("商  是：" + bignum3);
+
+        //取整
+        BigDecimal bignum4 = new BigDecimal("59.75");
+        long l  = bignum4.setScale( 0, BigDecimal.ROUND_UP ).longValue(); // 向上取整
+        System.out.println("向上取整  是：" + l);
+
+        long l2  = bignum4.setScale( 0, BigDecimal.ROUND_DOWN ).longValue(); // 向下取整
+        System.out.println("向下取整  是：" + l2);
     }
 }

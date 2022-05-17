@@ -10,10 +10,7 @@ import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
-import java.util.Date;
-import java.util.LinkedHashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.logging.Level;
@@ -131,8 +128,22 @@ public class DateUtil {
     };
 
     /**
+     * 这两个计算出来 不包含头或者尾
+     * 举例  2020-01-01  到 2020-01-02   返还数据 为 1  根据具体情况是否调用getAllDateMax
+     * 直接获取两个日期相差的天数， 内部代码需要优化   需要解决内存溢出问题
+     */
+    public static BiFunction<LocalDate, LocalDate, Long> getDateLessDay = (startLd, endLd) -> endLd.toEpochDay() - startLd.toEpochDay();
+
+    /**
+     * 这两个计算出来 不包含头或者尾
+     * 举例  2020-01-01  到 2020-01-02   返还数据 为 2
+     * 直接获取两个日期相差的天数， 内部代码需要优化   需要解决内存溢出问题
+     */
+    public static BiFunction<LocalDate, LocalDate, Long> getAllDateMax = (startLd, endLd) -> getDateLessDay.apply(startLd,endLd) + 1;
+    /**
      * 获取开始日期和结束日期之间间隔的每一天
      * 含头含尾
+     * 在数据量大时候会出现内存溢出
      */
     public static BiFunction<LocalDate, LocalDate, Set<LocalDate>> getAllDate = (startLd, endLd) -> {
         Set<LocalDate> localDateSet = new LinkedHashSet<>();
@@ -154,6 +165,8 @@ public class DateUtil {
      * 获取开始时间和结束时间之间间隔的每个时间段
      * 含头含尾    不足舍弃
      * int 按照多少分钟分开
+     *
+     * 在数据量大时候会出现内存溢出
      */
     public static CiFunction<LocalTime, LocalTime, Integer, Set<LocalTime>> getAllTime = (startLt, endLt, interval) -> {
         Set<LocalTime> localTimeSet = new LinkedHashSet<>();
@@ -191,6 +204,8 @@ public class DateUtil {
      * 获取开始时间和结束时间之间间隔的每个时间段
      * 含头含尾    不足舍弃
      * int 按照多少秒分开
+     *
+     * 在数据量大时候会出现内存溢出
      */
     public static CiFunction<LocalDateTime, LocalDateTime, Integer, Set<LocalDateTime>> getAllDateTime = (startLt, endLt, interval) -> {
         Set<LocalDateTime> localTimeSet = new LinkedHashSet<>();
@@ -223,6 +238,11 @@ public class DateUtil {
 
     /**
      * 获取两个时间之间相差的时间
+     * 1秒等于   1000毫秒
+     * 1毫秒等于 1000微秒
+     * 1微秒等于 1000纳秒
+     * 在这个Duration中 存储的是 秒和纳秒
+     * toString 需要格式化 PT8802H39M34.2496708S
      */
     public static BiFunction<LocalDateTime, LocalDateTime, Duration> duration = Duration::between;
 
@@ -256,6 +276,81 @@ public class DateUtil {
     public static Function<LocalDateTime, LocalDateTime> sunday = (todayOfLastWeek) ->
             todayOfLastWeek.with(TemporalAdjusters.next(DayOfWeek.MONDAY)).minusDays(1);
 
+    /**
+     * 获取当前时间转换成 dd HH:mm:ss
+     */
+    public static String toTime(Long l,String... string){
+        string = Optional.ofNullable(string).orElse(new String[]{"d", "h", "m", "s"});
+        for(int i =0;i < string.length;i++){
+            String d = "";
+            switch (i){
+                case 0: d = "d";break;
+                case 1: d = "h";break;
+                case 2: d = "m";break;
+                case 3: d = "s";break;
+            }
+            String finalD = d;
+            string[i] = Optional.ofNullable(string[i]).map(e->{
+                if(e.isEmpty()){
+                    return finalD;
+                }
+                return e;
+            }).orElse(d);
+        }
+
+        long s = l/1000;
+        //天数计算
+        long days = (s)/(24*3600);
+        //小时计算
+        long hours = (s)%(24*3600)/3600;
+        //分钟计算
+        long minutes = (s)%3600/60;
+        //秒计算
+        long second = (s)%60;
+        StringBuilder times = new StringBuilder();
+        if(days != 0){
+            times.append(days).append("d");
+        }
+        times.append(hours).append("h").append(minutes).append("m").append(second).append("s");
+        return times.toString();
+    }
+
+    /**
+     * 传入自己设计的显示时间字符串 返还毫秒数
+     */
+    public static Long toTime(String string){
+        String s = string.replaceAll("d", ":").replaceAll("h", ":")
+                .replaceAll("m", ":").replaceAll("s", ":");
+        String[] split = s.split(":");
+        int length = split.length;
+        long d = 0l;
+
+        for(int i = length;i > 0 ;i--){
+            if(length == i){
+                //计算秒
+                d += Integer.parseInt(split[i])*1000;
+            }else if(length -1 == i){
+                //计算分钟
+                d += Integer.parseInt(split[i])*60*1000;
+            }else if(length -2 == i){
+                //计算小时
+                d += Integer.parseInt(split[i])*60*60*1000;
+            }else if(length -3 == i){
+                //计算天
+                d += Integer.parseInt(split[i])*24*60*60*1000;
+            }
+
+        }
+
+        return d;
+    }
+
+
+    //获取本周周一和周日
+//    LocalDate today = LocalDate.now();
+//    LocalDate monday = today.with(TemporalAdjusters.previousOrSame( DayOfWeek.MONDAY));
+//    LocalDate sunday = today.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY ));
+
     public static void main(String[] args) {
 //        getAllTime.apply(LocalTime.of(0,0,0),LocalTime.of(23,59,59),60);
         getAllDateTime.apply(LocalDateTime.of(2020, 10, 14, 0, 0, 0),
@@ -264,6 +359,7 @@ public class DateUtil {
 
         LocalDateTime now = LocalDateTime.now();
         DaidaLocalDateTime s = new DaidaLocalDateTime(now);
+        s.setEndDate(LocalDateTime.of(2021, 1, 3, 0, 0, 0));
         s.addTime("4000", "20", false);
         s.updTime(1, 2, 3, 4, 5, 6, 7);
         Logger.getAnonymousLogger().log(Level.INFO, LocalDate.now().toString());
@@ -274,7 +370,7 @@ public class DateUtil {
 
 //        LocalDateTime now = LocalDateTime.now();
         System.out.println("计算两个时间的差：");
-        LocalDateTime end = LocalDateTime.now();
+        LocalDateTime end = LocalDateTime.of(2023,03,19,03,03,03);
         Duration duration = Duration.between(now, end);
         long days = duration.toDays(); //相差的天数
         long hours = duration.toHours();//相差的小时数
@@ -283,5 +379,11 @@ public class DateUtil {
         long nanos = duration.toNanos();//相差的纳秒数
         System.out.println(now);
         System.out.println(end);
+        System.out.println(days);
+        System.out.println(hours);
+        System.out.println(minutes);
+        System.out.println(millis);
+        System.out.println(nanos);
+        System.out.println(DateUtil.duration.apply(now,end));
     }
 }

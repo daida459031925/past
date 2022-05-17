@@ -168,35 +168,35 @@ public class DaidaLocalDateTime {
     }
 
     /**
-     * 相差的天数
+     * 相差的天数  计算方式24小时计算方式
      */
     public long getToDays() {
         return duration.toDays();
     }
 
     /**
-     * 相差的小时数
+     * 相差的小时数 计算方式24小时计算方式
      */
     public long getToHours() {
         return duration.toHours();
     }
 
     /**
-     * 相差的分钟数
+     * 相差的分钟数 计算方式24小时计算方式
      */
     public long getToMinutes() {
         return duration.toMinutes();
     }
 
     /**
-     * 相差毫秒数
+     * 相差毫秒数 计算方式24小时计算方式
      */
     public long getToMillis() {
         return duration.toMillis();
     }
 
     /**
-     * 相差的纳秒数
+     * 相差的纳秒数 计算方式24小时计算方式
      */
     public long getToNanos() {
         return duration.toNanos();
