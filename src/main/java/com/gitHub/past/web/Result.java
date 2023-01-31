@@ -1,6 +1,7 @@
 package com.gitHub.past.web;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -13,6 +14,8 @@ import java.util.function.Function;
  */
 public class Result<T> {
 
+    public static final int OK = 200;
+    public static final int ERR = 500;
     /**
      * 返回结果状态码
      */
@@ -37,43 +40,43 @@ public class Result<T> {
         this.data = data;
     }
 
-    public static Result OK() {
-        return new Result(Http.OK,null,null);
+    public static <T> Result<T> OK() {
+        return OK(null,null);
     }
 
-    public static <T> Result OK(T data) {
-        return new Result(Http.OK,null,data);
+    public static <T> Result<T> OK(T data) {
+        return OK(data,null);
     }
 
-    public static <T> Result OK(String msg,T data) {
-        return new Result(Http.OK,msg,data);
+    public static <T> Result<T> OK(T data,String msg){
+        return new Result(OK,msg,data);
     }
 
-    public static <T> Result ERR() {
-        return new Result(Http.ERR,null,null);
+    public static <T> Result<T> ERR() {
+        return ERR(null,null);
     }
 
-    public static <T> Result ERR(String msg) {
-        return new Result(Http.ERR,msg,null);
+    public static <T> Result<T> ERR(String msg) {
+        return ERR(null,msg);
     }
 
-    public static <T> Result ERR(String msg,T data) {
-        return new Result(Http.ERR,msg,data);
+    public static <T> Result<T> ERR(T data,String msg) {
+        return new Result(ERR,msg,data);
     }
 
-    public Result setFunction(Function<Object,Object> function){
+    public Result<T> setFunction(Function<Object,Object> function){
         return setFunction(function,null);
     }
 
-    public Result setFunction(Function<Object,Object> function,String msg){
+    public Result<T> setFunction(Function<Object,Object> function,String msg){
         Function<Object,Object> f = (obj)->{
             try {
-                if(this.state.equals(Http.OK)){
+                if(this.state.equals(OK)){
                     return function.apply(obj);
                 }
             }catch (Exception e){
                 e.printStackTrace();
-                this.state = Http.ERR;
+                this.state = ERR;
                 this.data = null;
                 this.msg = msg;
             }
@@ -88,11 +91,11 @@ public class Result<T> {
         return this;
     }
 
-    public Result exec(){
+    public Result<T> exec(){
         return exec(null);
     }
 
-    public Result exec(Object obj){
+    public Result<T> exec(Object obj){
         if(Objects.nonNull(this.function)){
             Object apply = this.function.apply(obj);
             this.data = (T) apply;
@@ -118,14 +121,16 @@ public class Result<T> {
 
         Function<Object,Object> function3 = (obj)->{
             System.out.println(obj);
-            HashMap<Object, Object> objectObjectHashMap = new HashMap<>();
+            Map<Object, Object> objectObjectHashMap = new HashMap<>();
             objectObjectHashMap.put("ASDASD",123156);
             return objectObjectHashMap;
         };
 
-        Result exec = OK().setFunction(function).setFunction(function1).setFunction(function2).setFunction(function3).exec("123");
-        System.out.println(Objects.nonNull(exec.msg));
-        System.out.println(Objects.isNull(exec.msg));
+        Result<Object> exec = OK().setFunction(function).setFunction(function1).setFunction(function2).setFunction(function3).exec("123");
+        System.out.println(Objects.nonNull(exec));
+        System.out.println(Objects.isNull(exec));
+        Map<String,String> data1 = exec.getData(Map.class);
+        System.out.println(data1);
     }
 
 
@@ -137,9 +142,20 @@ public class Result<T> {
                 ", data=" + data +
                 '}';
     }
-}
 
-class Http {
-    static Integer OK = 200;
-    static Integer ERR = 500;
+    public Integer getState() {
+        return state;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public <E> E getData(Class<E> clazz) {
+        return (E)data;
+    }
+
+    public T getData() {
+        return data;
+    }
 }
