@@ -157,6 +157,20 @@
             <artifactId>vavr</artifactId>
             <version>1.0.0-alpha-4</version>
         </dependency>
+
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.8.11</version>
+        </dependency>
+
+        <dependency>
+            <groupId>arcsoft</groupId>
+            <artifactId>arcsoft</artifactId>
+            <version>3.0.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/java/com/gitHub/past/openFace/arcsoft-sdk-face-3.0.0.0.jar</systemPath>
+        </dependency>
     </dependencies>
 
 </project>
