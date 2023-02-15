@@ -1,7 +1,7 @@
 package com.gitHub.past.net;
 
 import cn.hutool.http.HttpRequest;
-import cn.hutool.log.Log;
+import com.gitHub.past.log.Log;
 import org.apache.commons.lang.StringUtils;
 
 import java.net.InetSocketAddress;
@@ -20,16 +20,16 @@ public class Http {
             requestUrl = url + "?" + params;
         }
         String respData = null;
-        Log.get().info("httpGet req is 【{}】", params);
+        Log.info("httpGet req is 【{}】", params);
         HttpRequest httpRequest = HttpRequest.get(requestUrl).timeout(socketTimeout).header("token",
                 "application/json");
         if ("Y".equalsIgnoreCase(useProxy)) {
-            Log.get().info(String.format("使用代理"));
+            Log.info(String.format("使用代理"));
             httpRequest.setProxy(new Proxy(Proxy.Type.HTTP,
                     new InetSocketAddress(proxyHost, Integer.parseInt(proxyPort))));
         }
         respData = httpRequest.execute().body();
-        Log.get().info(String.format("HttpsUtil:httpGet | 请求信息：%s | 响应信息: %s", httpRequest.getUrl(), respData));
+        Log.info(String.format("HttpsUtil:httpGet | 请求信息：%s | 响应信息: %s", httpRequest.getUrl(), respData));
         return respData;
     }
 
@@ -42,10 +42,10 @@ public class Http {
             requestUrl = url + "?" + params;
         }
         String respData = null;
-        Log.get().info("httpPost req is 【{}】", sendBodyData);
+        Log.info("httpPost req is 【{}】", sendBodyData);
         HttpRequest httpRequest = HttpRequest.post(requestUrl).timeout(socketTimeout).header("Content-Type", "application/json");
         if ("Y".equalsIgnoreCase(useProxy)) {
-            Log.get().info(String.format("使用代理"));
+            Log.info(String.format("使用代理"));
             httpRequest.setProxy(new Proxy(Proxy.Type.HTTP,
                     new InetSocketAddress(proxyHost, Integer.parseInt(proxyPort))));
         }
@@ -53,7 +53,7 @@ public class Http {
             httpRequest.body(sendBodyData);
         }
         respData = httpRequest.execute().body();
-        Log.get().info(String.format("HttpsUtil:httpPost | 请求信息：%s | 响应信息: %s", httpRequest.getUrl(), respData));
+        Log.info(String.format("HttpsUtil:httpPost | 请求信息：%s | 响应信息: %s", httpRequest.getUrl(), respData));
         return respData;
     }
 }

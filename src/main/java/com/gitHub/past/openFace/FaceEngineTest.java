@@ -36,7 +36,7 @@ public class FaceEngineTest {
         }
 
 
-        ActiveFileInfo activeFileInfo=new ActiveFileInfo();
+        ActiveFileInfo activeFileInfo = new ActiveFileInfo();
         errorCode = faceEngine.getActiveFileInfo(activeFileInfo);
         if (errorCode != ErrorInfo.MOK.getValue() && errorCode != ErrorInfo.MERR_ASF_ALREADY_ACTIVATED.getValue()) {
             System.out.println("获取激活文件信息失败");
