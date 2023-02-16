@@ -30,4 +30,15 @@ public class Log {
         log.debug(str,arguments);
     }
 
+    public static void info(Exception e){
+        log.info(e);
+    }
+
+    public static void err(Exception e){
+        log.error(e);
+    }
+
+    public static void debug(Exception e){
+        log.debug(e);
+    }
 }
