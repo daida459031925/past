@@ -1,13 +1,12 @@
 package com.gitHub.past.msg.qyweixin;
 
-import cn.hutool.log.Log;
 import com.alibaba.fastjson.JSONObject;
+import com.gitHub.past.log.Log;
 import com.gitHub.past.net.Http;
 
 //企业微信
 public class WeiXinQyUtil {
 
-    private static Log log = Log.get();
     private static String getTokenUrl = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=ID&corpsecret=SECRET";
     private static String postYingYongUrl = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=ACCESS_TOKEN";
 
@@ -28,7 +27,7 @@ public class WeiXinQyUtil {
         //每个应用单独一个SECRET
         getTokenUrl = getTokenUrl.replace("SECRET","Q-cX60MGqnciM2pob0Nrwi5ox-3m7sYud2I4OX46VTE");
         String s = Http.httpGet(getTokenUrl, "", "");
-        log.info(s);
+        Log.info(s);
         return s;
     }
 
@@ -49,7 +48,7 @@ public class WeiXinQyUtil {
                 "}"));
         postYingYongUrl = postYingYongUrl.replace("ACCESS_TOKEN", token);
         String s1 = Http.httpPost(postYingYongUrl, "", s, "");
-        log.info(s1);
+        Log.info(s1);
         return s1;
     }
 }

@@ -1,12 +1,11 @@
 package com.gitHub.past.msg.dingding;
 
-import cn.hutool.log.Log;
 import com.alibaba.fastjson.JSONObject;
+import com.gitHub.past.log.Log;
 import com.gitHub.past.net.Http;
 
 //钉钉服务
 public class DingDingUtil {
-    private static Log log = Log.get();
 
     private static String agentId = "2400472232";
     private static String appKey = "dingioye3svu1uw8i3yb";
@@ -35,7 +34,7 @@ public class DingDingUtil {
         //每个应用单独一个SECRET
         getTokenUrl = getTokenUrl.replace("APPSECRET",appSecret);
         String s = Http.httpGet(getTokenUrl, "", "");
-        log.info(s);
+        Log.info(s);
         return s;
     }
 
@@ -53,7 +52,7 @@ public class DingDingUtil {
                 "}"));
         postYingYongUrl = postYingYongUrl.replace("ACCESS_TOKEN", token);
         String s1 = Http.httpPost(postYingYongUrl, "", s, "");
-        log.info(s1);
+        Log.info(s1);
         return s1;
     }
 }

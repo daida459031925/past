@@ -2,14 +2,13 @@ package com.gitHub.past.msg.email;
 
 import cn.hutool.extra.mail.MailAccount;
 import cn.hutool.extra.mail.MailUtil;
-import cn.hutool.log.Log;
+import com.gitHub.past.log.Log;
 
 import java.util.List;
 import java.util.Map;
 
 public class email {
 
-    private static Log log = Log.get();
     /**
      * 发送HTML邮件
      *
@@ -39,10 +38,10 @@ public class email {
             account.setSocketFactoryPort(465);
             MailUtil.send(account, adressees, title, html, true);
         } catch (Exception e) {
-            log.debug("邮件发送异常信息：{}", e.getMessage());
+            Log.debug("邮件发送异常信息：{}", e.getMessage());
             flag = false;
         }
-        log.debug("邮件发送状态：{}", flag ? "发送成功" : "发送失败");
+        Log.debug("邮件发送状态：{}", flag ? "发送成功" : "发送失败");
         return flag;
     }
 }
