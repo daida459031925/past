@@ -1,14 +1,13 @@
 package com.gitHub.past.msg.fwweixin;
 
-import cn.hutool.log.Log;
 import com.alibaba.fastjson.JSONObject;
+import com.gitHub.past.log.Log;
 import com.gitHub.past.msg.fwweixin.MsgTemplate.Custom;
 import com.gitHub.past.net.Http;
 import com.gitHub.past.web.AccessToken;
 
 //微信服务号
 public class WeiXinFwUtil {
-    private static Log log = Log.get();
 
 //    private static String appId = "wx697f35002b64629a";
 //    private static String appsecret = "5247147da4ade2b714fa5c56f479d915";
@@ -54,7 +53,7 @@ public class WeiXinFwUtil {
         //每个应用单独一个SECRET
         getTokenUrl = getTokenUrl.replace("APPSECRET",appsecret);
         String s = Http.httpGet(getTokenUrl, "", "");
-        log.info(s);
+        Log.info(s);
         return s;
     }
 
@@ -71,7 +70,7 @@ public class WeiXinFwUtil {
                 "       }\n"));
         postYingYongUrl = postYingYongUrl.replace("ACCESS_TOKEN", token);
         String s1 = Http.httpPost(postYingYongUrl, "", s, "");
-        log.info(s1);
+        Log.info(s1);
         return s1;
     }
 }
